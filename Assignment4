@@ -1,0 +1,20 @@
+from qiskit import QuantumCircuit, Aer, execute
+from qiskit.visualization import plot_histogram
+from matplotlib import pyplot as plt
+
+# Create the Bell circuit
+qc = QuantumCircuit(2, 2)
+qc.h(0)        # Hadamard on qubit 0
+qc.cx(0, 1)    # CNOT with control 0, target 1
+qc.measure([0, 1], [0, 1])  # Measure both
+
+# Simulate
+simulator = Aer.get_backend('qasm_simulator')
+job = execute(qc, simulator, shots=1024)
+result = job.result()
+counts = result.get_counts(qc)
+
+# Output
+print(counts)
+plot_histogram(counts)
+plt.show()
